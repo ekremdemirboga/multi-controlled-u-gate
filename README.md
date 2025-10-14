@@ -23,7 +23,7 @@ pip install numpy qiskit scipy
 
 ## How to use
 
-The core of the project is the ```bash multi_controlled_u_circuit``` function, which takes the number of control qubits n and a 2x2 unitary matrix U as input. Here is a simple example of how to build a $ C^3 U$ gate:
+The core of the project is the ```bash multi_controlled_u_circuit``` function, which takes the number of control qubits n and a 2x2 unitary matrix U as input. Here is a simple example of how to build a $C^3 U$ gate:
 
 ```bash
 import numpy as np
@@ -59,6 +59,6 @@ The run function in the controlled-u-gate.ipynb notebook provides a more detaile
 ## Complexity Analysis
 
 The resource complexity of this implementation is as follows:
-* Gate Count: $ O (n^2)$
-* Circuit Depth: $ O (n^2)$
-* Ancilla Qubits:  $ O (n)$
+* Gate Count: $O (n^2)$
+* Circuit Depth: $O (n^2)$
+* Ancilla Qubits:  $O (n)$
