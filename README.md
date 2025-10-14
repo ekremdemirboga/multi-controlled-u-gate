@@ -1,5 +1,59 @@
-Multi-Controlled U Gate Implementation in QiskitThis repository contains a Python implementation of a multi-controlled unitary gate () using Qiskit. This type of gate is a fundamental primitive in many advanced quantum algorithms, including Shor's algorithm and Grover's search.The implemented solution is based on the recursive decomposition method described by Barenco et al. in their 1995 paper, "Elementary Gates for Quantum Computation."OverviewA multi-controlled unitary gate, , is a quantum gate that applies a single-qubit unitary operation  to a target qubit if and only if all  control qubits are in the state . If any control qubit is in the state , the gate acts as the identity.This project provides a Qiskit function that takes an integer n (the number of controls) and a  unitary matrix U and returns a QuantumCircuit object that correctly implements the  operation.Methodology: Recursive DecompositionThe core of the implementation is a recursive algorithm that constructs a  gate from gates with fewer controls. The key insight is that a  gate can be built from singly-controlled  gates (where ) and -controlled gates.The general recursive step for  is a five-step sequence:Apply a singly-controlled  gate on the target, controlled by the last control qubit.Apply a  (multi-controlled Toffoli) gate, targeting the last control qubit.Apply a singly-controlled  gate on the target, controlled by the last control qubit.Apply the same  gate again.Apply a  gate (the recursive call) on the target, controlled by the first  qubits.This sequence cleverly ensures that the full  operation is synthesized only when all  controls are active.InstallationThe code requires the following Python libraries:pip install qiskit numpy scipy
-UsageThe main function is get_multi_controlled_u_circuit_corrected, located in the notebook.from qiskit.circuit import QuantumCircuit
+Multi-Controlled U Gate Implementation in Qiskit
+This repository contains a Python implementation of a multi-controlled unitary gate (C 
+n
+ U) using Qiskit. This type of gate is a fundamental primitive in many advanced quantum algorithms, including Shor's algorithm and Grover's search.
+
+The implemented solution is based on the recursive decomposition method described by Barenco et al. in their 1995 paper, "Elementary Gates for Quantum Computation."
+
+Overview
+A multi-controlled unitary gate, C 
+n
+ U, is a quantum gate that applies a single-qubit unitary operation U to a target qubit if and only if all n control qubits are in the state ∣1⟩. If any control qubit is in the state ∣0⟩, the gate acts as the identity.
+
+This project provides a Qiskit function that takes an integer n (the number of controls) and a 2×2 unitary matrix U and returns a QuantumCircuit object that correctly implements the C 
+n
+ U operation.
+
+Methodology: Recursive Decomposition
+The core of the implementation is a recursive algorithm that constructs a C 
+n
+ U gate from gates with fewer controls. The key insight is that a C 
+n
+ U gate can be built from singly-controlled V gates (where V 
+2
+ =U) and (n−1)-controlled gates.
+
+The general recursive step for n>1 is a five-step sequence:
+
+Apply a singly-controlled V gate on the target, controlled by the last control qubit.
+
+Apply a C 
+n−1
+ X (multi-controlled Toffoli) gate, targeting the last control qubit.
+
+Apply a singly-controlled V 
+†
+  gate on the target, controlled by the last control qubit.
+
+Apply the same C 
+n−1
+ X gate again.
+
+Apply a C 
+n−1
+ V gate (the recursive call) on the target, controlled by the first n−1 qubits.
+
+This sequence cleverly ensures that the full U operation is synthesized only when all n controls are active.
+
+Installation
+The code requires the following Python libraries:
+
+pip install qiskit numpy scipy
+
+Usage
+The main function is get_multi_controlled_u_circuit_corrected, located in the notebook.
+
+from qiskit.circuit import QuantumCircuit
 from qiskit.quantum_info import Operator
 import numpy as np
 
@@ -27,4 +81,28 @@ op_generated = Operator(ccx_circuit)
 op_reference = Operator(reference_qc)
 
 print(f"\nIs the generated circuit equivalent to Qiskit's native MCX? {op_generated.equiv(op_reference)}")
-Resource Complexity AnalysisThe resource requirements for this decomposition scale with the number of control qubits, .ResourceAsymptotic ComplexityGate CountCircuit DepthAncilla QubitsThe analysis shows that while this construction is general and powerful, it is resource-intensive, with gate count and depth growing quadratically. This highlights the significant overhead associated with implementing complex logical operations on quantum computers.
+
+Resource Complexity Analysis
+The resource requirements for this decomposition scale with the number of control qubits, n.
+
+Resource
+
+Asymptotic Complexity
+
+Gate Count
+
+O(n 
+2
+ )
+
+Circuit Depth
+
+O(n 
+2
+ )
+
+Ancilla Qubits
+
+O(n)
+
+The analysis shows that while this construction is general and powerful, it is resource-intensive, with gate count and depth growing quadratically. This highlights the significant overhead associated with implementing complex logical operations on quantum computers.
