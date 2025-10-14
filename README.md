@@ -19,3 +19,7 @@ To use this project, you will need the following libraries:
 You can install them using pip:
 ```bash
 pip install numpy qiskit scipy
+
+## How to use
+
+The core of the project is ```bash the multi_controlled_u_circuit function, which takes the number of control qubits n and a 2x2 unitary matrix U as input.
