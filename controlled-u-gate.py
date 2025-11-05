@@ -31,7 +31,7 @@ def multi_controlled_u_circuit(n: int, U: np.ndarray) -> QuantumCircuit:
     
     # Ancilla qubits may be needed for the multi-controlled Toffoli gates
     # The number of ancillas for the default 'noancilla' mode of mcx is n-2.
-    num_ancillas = max(0, n - 2)
+    num_ancillas = 0
     ancillas = AncillaRegister(num_ancillas, name='ancilla')
     
     # Qiskit orders qubits by concatenating registers: [controls, target, ancillas]
