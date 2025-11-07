@@ -159,7 +159,20 @@ def run(n_controls, U_matrix, verify=False, save_fig=False):
         print("\nVerification failed. The circuit's output state does not match the expected state.")
         print("Final state vector:\n", np.round(final_state.data, 2))
         print("Expected state vector:\n", np.round(expected_state.data, 2))
-        
+    
+    # Additional verification: Check the full unitary matrix structure
+    print("\n--- Verifying the full unitary matrix ---")
+    full_unitary = Operator(circuit).data
+    U_block = full_unitary[(1 << n_controls) - 1::1 << n_controls, 
+                           (1 << n_controls) - 1::1 << n_controls]
+    
+    if np.allclose(U_block, U_matrix):
+        print("Full unitary verification successful! The U block matches the input matrix.")
+    else:
+        print("Full unitary verification failed. The U block does not match.")
+        print("Expected U:\n", np.round(U_matrix, 3))
+        print("Actual U block:\n", np.round(U_block, 3))
+    
     if save_fig == True:
         drawing = circuit.draw(output='mpl',style='iqp-dark')
         drawing.savefig('multi_controlled_u_circuit_'+str(n_controls)+'_controls.png')
